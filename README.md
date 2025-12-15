@@ -86,8 +86,8 @@ To guide the administrator, the UI actions adapt based on the session status:
 
   ```
 
-CapstoneProject
-├── .venv/
+SwiftKYC
+├── Screenshots
 ├── swiftkyc/
 │   ├── __pycache__/
 │   ├── app/
@@ -110,13 +110,11 @@ CapstoneProject
 │   ├── test_images/
 │   ├── tools/
 │   ├── uploads/
-│   ├── venv/
-│   ├── .env
 │   ├── alembic.ini
 │   ├── main.py
 │   ├── requirements.txt
 │   └── worker.py
-├── venv/
+|
 └── Readme.md
 
 
@@ -128,7 +126,7 @@ CapstoneProject
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/composedlabyrinth/CapstoneProject
+git clone https://github.com/composedlabyrinth/SwiftKYC.git
 ````
 
 ### 2️⃣ Create and activate a virtual environment
