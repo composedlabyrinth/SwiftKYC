@@ -236,6 +236,7 @@ The FastAPI server will be running on port 8000 by default.
 </div>
 
 #### Admin Dashboard
+
 <div align="center">
   <img src="Screenshots/Admin.png" height="500" alt="Home" />
 </div>
