@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SwiftKYC — Digital KYC</title>
+
+  <link rel="stylesheet" href="/static/styles.css">
+
+ 
+  <link rel="icon" type="image/png" href="logo.png">
+ 
+  <meta name="description" content="SwiftKYC — Modern digital KYC wizard and admin dashboard (PAN / Aadhaar OCR + selfie verification)." />
+</head>
+<body class="theme-navy">
+  <div id="root">
+
+    <!-- Top navigation / header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark-img">
+            <img src="/static/logo.png" alt="SwiftKYC logo">
+        </div>
+
+        <div class="brand-title">
+          <div class="title">SwiftKYC</div>
+          <div class="subtitle">Quick, Secure & Compliant</div>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <button id="nav-home" class="nav-btn">Start Digital KYC</button>
+        <button id="nav-admin" class="nav-btn ghost">Admin Dashboard</button>
+      </nav>
+    </header>
+
+    <!-- App container (JS will render into #app) -->
+    <main id="app" class="container">
+      <!-- Initial placeholder / JS will replace with templates or injection -->
+      <div class="card center-card">
+        <h2>Welcome to SwiftKYC</h2>
+        <p class="muted">Click <strong>Start Digital KYC</strong> to begin a new verification, or open the Admin Dashboard to review sessions.</p>
+        <div style="margin-top:14px">
+          <button id="start-digital-kyc" class="primary-lg">Start Digital KYC</button>
+          <button id="open-admin" class="ghost">Admin Dashboard</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- HELP & TIPS SECTION -->
+<section id="help-tips" class="card" style="margin-top:40px;">
+  <h2>Help & Tips</h2>
+  <p class="muted" style="margin-bottom:16px;">
+    Stuck somewhere? These quick tips can help you complete your KYC smoothly.
+  </p>
+
+  <h3>Common document issues</h3>
+  <ul class="tips-list">
+    <li>Make sure all four corners of the document are visible.</li>
+    <li>Avoid photos under harsh lights or direct sunlight.</li>
+    <li>Clean your camera lens for a sharper image.</li>
+    <li>Keep the document text in focus and readable.</li>
+  </ul>
+
+  <h3>Selfie tips</h3>
+  <ul class="tips-list">
+    <li>Face a window or soft light; avoid strong backlight.</li>
+    <li>Don't cover your face with hair, hands, or accessories.</li>
+    <li>Hold the phone at eye level and look straight at the camera.</li>
+  </ul>
+
+  <h3>Why did my KYC fail?</h3>
+  <p class="muted">
+    We’ll always show you a clear reason — blurry image, glare, missing corners, or face mismatch. 
+    Follow the on-screen guidance and try again. If it still fails, connect with an agent using our Video KYC feature.
+  </p>
+</section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div>© <span id="year"></span> SwiftKYC — Built for HDFC Capstone Project</div>
+    </footer>
+  </div>
+
+  <!-- ---------------------------
+       Modal: Video KYC Confirmation
+       --------------------------- -->
+  <div id="modal-video-kyc" class="modal hidden" role="dialog" aria-hidden="true" aria-labelledby="videoKycTitle">
+    <div class="modal-panel card">
+      <h3 id="videoKycTitle">Video KYC Request</h3>
+      <p class="muted">Your request for Video KYC has been received. A verification officer will initiate a video call shortly.</p>
+      <div class="modal-actions">
+        <button id="videoKycOk" class="primary">OK</button>
+      </div>
+    </div>
+  </div>
+
+<!-- Session Detail Modal -->
+<div id="modal-session-detail" class="modal hidden" role="dialog" aria-hidden="true" aria-labelledby="sessionDetailTitle">
+  <div class="modal-panel card" style="max-width:900px; width:100%; position:relative;">
+    <button id="session-detail-close" class="ghost" style="position:absolute; right:14px; top:14px;">Close ✕</button>
+    <div id="session-detail-modal-body" style="padding-top:6px;">
+      <!-- JS will inject session detail HTML here -->
+      <div class="muted">Loading...</div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- ---------------------------
+       Templates (in-DOM) — used by app.js
+       --------------------------- -->
+
+  <!-- HOME / LANDING template -->
+  <template id="tpl-home">
+    <div class="card home-card">
+      <div class="home-inner">
+        <h2>Start Digital KYC</h2>
+        <p class="muted">You will need a government ID (PAN or Aadhaar) and a live selfie. This process takes a few minutes.</p>
+        <div class="actions">
+          <button data-action="start-kyc" class="primary-lg">Start Digital KYC</button>
+          <button data-action="video-kyc" class="ghost">Connect to an agent (Video KYC)</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- CREATE SESSION template (name, phone, age) -->
+  <template id="tpl-create-session">
+    <section class="card">
+      <div class="form-header">
+        <h3>Create KYC Session</h3>
+        <p class="muted">Enter your name and mobile number. Age must be 18 or above to proceed.</p>
+      </div>
+
+      <form id="form-create-session" novalidate>
+        <label for="i-name">Full name</label>
+        <input id="i-name" name="name" type="text" autocomplete="name" required />
+
+        <label for="i-mobile">Mobile (10 digits)</label>
+        <input id="i-mobile" name="mobile" type="tel" inputmode="tel" pattern="\\d{10}" maxlength="10" required />
+
+        <label for="i-age">Age</label>
+        <input id="i-age" name="age" type="number" min="18" required />
+
+        <div class="form-actions">
+          <button type="submit" class="primary">Create Session & Continue</button>
+          <button type="button" class="ghost" data-action="cancel-to-home">Cancel</button>
+        </div>
+
+        <div id="create-session-msg" class="muted small" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </template>
+
+  <!-- SELECT DOCUMENT template -->
+  <template id="tpl-select-document">
+    <section class="card">
+      <h3>Select Document Type</h3>
+      <div class="doc-choices">
+        <button class="doc-btn ghost" data-doc="PAN">PAN</button>
+        <button class="doc-btn ghost" data-doc="AADHAAR">AADHAAR</button>
+      </div>
+      <div class="muted small">Choose which document you will upload for OCR validation.</div>
+    </section>
+  </template>
+
+  <!-- ENTER DOC NUMBER template -->
+  <template id="tpl-enter-doc-number">
+    <section class="card">
+      <h3>Enter Document Number</h3>
+      <form id="form-doc-number" novalidate>
+        <label for="i-docno">Document number</label>
+        <input id="i-docno" name="document_number" type="text" required />
+        <div class="form-actions">
+          <button type="submit" class="primary">Save & Continue</button>
+          <button type="button" class="ghost" data-action="back-to-select">Back</button>
+        </div>
+        <div id="doc-number-msg" class="muted small" aria-live="polite"></div>
+      </form>
+    </section>
+  </template>
+
+  <!-- UPLOAD DOCUMENT template (file or camera) -->
+  <template id="tpl-upload-document">
+    <section class="card">
+      <h3>Upload Document — <span id="upload-doc-type">PAN</span></h3>
+
+      <div class="uploader-grid">
+        <div class="uploader-left">
+          <label for="source-select" class="muted small">Choose source</label>
+          <select id="source-select">
+            <option value="file">Upload from device</option>
+            <option value="camera">Use camera</option>
+          </select>
+
+          <div id="source-area" class="source-area" aria-live="polite"></div>
+
+          <div class="form-actions" style="margin-top:10px">
+            <button id="upload-doc-btn" class="primary">Upload & Validate</button>
+            <button id="cancel-upload-doc" class="ghost">Cancel</button>
+          </div>
+
+          <div id="upload-msg" class="muted small" aria-live="polite"></div>
+        </div>
+
+        <div class="uploader-right">
+          <div class="preview card small-preview" id="doc-preview">No file selected</div>
+          <div class="muted small" style="margin-top:8px">Preview</div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- OCR Progress / Result template -->
+  <template id="tpl-ocr-progress">
+    <section class="card">
+      <h3>OCR validation in progress</h3>
+      <p class="muted small">We are validating your document. This usually takes a few seconds.</p>
+      <div class="progress" aria-hidden="false">
+        <div class="progress-bar" id="ocr-progress-bar" style="width: 0%"></div>
+      </div>
+
+      <div id="ocr-result" class="muted small" style="margin-top:12px"></div>
+    </section>
+  </template>
+
+  <!-- SELFIE Upload template (camera only) -->
+  <template id="tpl-selfie-upload">
+    <section class="card">
+      <h3>Take a Selfie</h3>
+      <p class="muted small">For identity verification — camera-only. Please ensure good lighting and no face obstruction.</p>
+
+      <div class="selfie-area">
+        <video id="selfie-video" autoplay playsinline></video>
+        <canvas id="selfie-canvas" class="hidden"></canvas>
+        <div class="form-actions" style="margin-top:10px">
+          <button id="capture-selfie" class="primary">Capture</button>
+          <button id="upload-selfie" class="primary-outline">Upload Selfie</button>
+          <button id="cancel-selfie" class="ghost">Cancel</button>
+        </div>
+
+        <div id="selfie-preview" class="preview small-preview muted">No selfie captured yet</div>
+      </div>
+    </section>
+  </template>
+
+  <!-- STATUS template -->
+  <template id="tpl-status">
+    <section class="card">
+      <h3>KYC Status</h3>
+      <div id="status-info" class="status-grid">
+        <!-- JS will inject key-value cards here -->
+      </div>
+
+      <div class="form-actions" style="margin-top:12px">
+        <button id="refresh-status" class="primary">Refresh</button>
+        <button id="to-home" class="ghost">Home</button>
+      </div>
+
+      <div id="status-raw" class="muted small" style="margin-top:12px"></div>
+    </section>
+  </template>
+
+  <!-- ---------------------------
+       ADMIN: Sessions list + filters template
+       --------------------------- -->
+  <template id="tpl-admin-list">
+    <section class="admin-layout">
+      <aside class="admin-filters card">
+        <h4>Filters</h4>
+        <label for="f-status">Status</label>
+        <div class="select-wrapper">
+            <select id="f-status">
+                <option value="">Any</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="IN_PROGRESS">In Progress</option>
+            </select>
+        </div>
+
+<input type="hidden" id="f-status" value="">
+
+        <label for="f-doc">Document Type</label>
+        <div class="select-wrapper">
+            <select id="f-doc">
+                <option value="">Any</option>
+                <option value="PAN">PAN</option>
+                <option value="AADHAAR">AADHAAR</option>
+            </select>
+        </div>
+
+        <input type="hidden" id="f-doc" value="">
+
+        <label for="f-date">Created on</label>
+        <input id="f-date" type="date" />
+        <div class="muted small" style="margin-top:6px">Select a date to see sessions created on that day.</div>
+
+
+        <div class="form-actions">
+          <button id="f-apply" class="primary">Apply</button>
+          <button id="f-reset" class="ghost">Reset</button>
+        </div>
+      </aside>
+
+      <div class="admin-main">
+        <div class="card">
+          <div class="admin-toolbar" style="display:flex;justify-content:space-between;align-items:center">
+            <h3>Sessions</h3>
+            <div class="muted small">List of KYC sessions (click a row to open details)</div>
+          </div>
+
+          <div id="sessions-list-wrap" class="table-wrap">
+            <!-- JS will render table here -->
+          </div>
+
+          <div id="sessions-empty" class="muted small hidden">No sessions matched your filters</div>
+        </div>
+
+        <div id="session-detail-wrap" class="card session-detail hidden">
+          <!-- Session details + Approve / Reject buttons -->
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- ---------------------------
+       Script: app.js (will be provided separately)
+       --------------------------- -->
+  <script src="/static/app.js" defer></script>
+  <script>
+    // small inline bootstrap: set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

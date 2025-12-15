@@ -1,0 +1,390 @@
+/* =========================================================================
+   SwiftKYC — styles.css
+   Theme: Soft dark navy background, calm teal + soft blue accents,
+          smooth card surfaces, soft shadows, rounded elements.
+   ========================================================================= */
+
+/* --------------------
+   Base variables
+   -------------------- */
+:root{
+  --bg:#071526;              /* soft dark navy background */
+  --card:#0f2a3a;            /* slightly lighter card surface */
+  --surface-2:#12323f;       /* alternate surface */
+  --text:#e6f6fb;            /* soft near-white text */
+  --muted:#9fb6c5;           /* muted descriptive text */
+  --accent-teal:#17a2a8;     /* calm teal */
+  --accent-blue:#4aa3ff;     /* soft blue */
+  --success:#10a37f;
+  --danger:#e06666;
+  --glass-shadow: 0 8px 20px rgba(3,10,18,0.55);
+  --soft-shadow: 0 10px 30px rgba(2,12,20,0.55);
+  --card-radius:14px;
+  --pad:18px;
+  --max-width:1100px;
+  --muted-2: #7f98a6;
+  --border: rgba(255,255,255,0.04);
+  --focus-ring: rgba(74,163,255,0.18);
+  --transition: 180ms cubic-bezier(.2,.9,.3,1);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial;
+}
+
+/* --------------------
+   Global / page
+   -------------------- */
+* { box-sizing: border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+html,body { height:100%; margin:0; }
+body.theme-navy {
+  background: linear-gradient(180deg,var(--bg), #05202b 120%);
+  color: var(--text);
+  font-family: var(--font);
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  min-height:100vh;
+}
+
+/* Root app container */
+#root { max-width: var(--max-width); margin:28px auto; padding:18px; }
+
+/* --------------------
+   Header / Nav
+   -------------------- */
+.app-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.brand { display:flex; align-items:center; gap:12px; }
+.brand-mark {
+  width:54px; height:54px; border-radius:12px;
+  background: linear-gradient(180deg,var(--accent-blue), #0f7ef7);
+  display:flex; align-items:center; justify-content:center; color:white; font-weight:700;
+  box-shadow: var(--soft-shadow);
+  font-family: Inter, system-ui, sans-serif;
+  font-size:18px;
+}
+
+.brand-mark-img img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: var(--soft-shadow);
+}
+
+.home-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  opacity: 0.95;
+}
+
+.brand-title .title { font-size:18px; font-weight:700; letter-spacing:0.2px; color:var(--text); }
+.brand-title .subtitle { font-size:12px; color:var(--muted); margin-top:2px; }
+
+/* Nav buttons */
+.main-nav { display:flex; gap:8px; align-items:center; }
+.nav-btn {
+  background:transparent; border:1px solid transparent; color:var(--text);
+  padding:8px 12px; border-radius:10px; font-weight:600; cursor:pointer;
+  transition: all var(--transition);
+}
+.nav-btn.ghost { background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.03); }
+.nav-btn:hover { transform:translateY(-2px); box-shadow: 0 6px 18px rgba(2,12,20,0.45); }
+
+/* --------------------
+   Containers & cards
+   -------------------- */
+.container { padding: 6px 0; }
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--card-radius);
+  padding: var(--pad);
+  box-shadow: 0 8px 20px rgba(3,10,18,0.5);
+  border: 1px solid var(--border);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.center-card { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:36px; }
+.card h2, .card h3 { margin:0 0 8px 0; color:var(--text); }
+.muted { color:var(--muted); }
+.small { font-size:13px; color:var(--muted); }
+
+/* --------------------
+   Buttons & inputs
+   -------------------- */
+button { font-family:inherit; }
+.primary, .primary-lg {
+  background: linear-gradient(180deg, var(--accent-teal), #14a693);
+  color: white; border: 0; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer;
+  box-shadow: 0 8px 20px rgba(21,128,120,0.16);
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+.primary-lg { padding:12px 18px; font-size:16px; border-radius:12px; }
+.primary:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(21,128,120,0.22); }
+
+.ghost {
+  background: transparent; color:var(--text); border: 1px solid rgba(255,255,255,0.04);
+  padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:600;
+}
+.primary-outline {
+  background: transparent; color:var(--accent-teal); border:1px solid rgba(23,162,168,0.14);
+  padding:8px 12px; border-radius:10px; font-weight:700;
+}
+
+/* Form controls */
+label { display:block; font-size:13px; margin-top:12px; color:var(--muted); }
+input[type=text], input[type=tel], input[type=number], select {
+  width:100%; padding:12px; margin-top:6px; border-radius:10px;
+  border:1px solid rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  color:var(--text); font-size:15px;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+input:focus, select:focus {
+  outline: none; box-shadow: 0 6px 18px var(--focus-ring); border-color: rgba(74,163,255,0.18);
+  transform: translateY(-1px);
+}
+.form-actions { display:flex; gap:10px; margin-top:14px; align-items:center; }
+
+/* --------------------
+   Uploader / preview
+   -------------------- */
+.uploader-grid { display:grid; grid-template-columns: 1fr 320px; gap:16px; align-items:start; }
+.uploader-left { min-width:0; }
+.uploader-right { display:flex; flex-direction:column; gap:10px; }
+.source-area { margin-top:10px; }
+.preview { border-radius:10px; padding:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01)); border:1px dashed rgba(255,255,255,0.03); min-height:160px; display:flex; align-items:center; justify-content:center; color:var(--muted); text-align:center; }
+.small-preview { padding:10px; min-height:120px; }
+.preview img { max-width:100%; border-radius:8px; display:block; }
+
+/* Video / camera */
+video { width:100%; height:auto; border-radius:10px; background:#000; display:block; }
+.hidden { display:none !important; }
+
+/* --------------------
+   Progress bar
+   -------------------- */
+.progress { width:100%; height:12px; background: rgba(255,255,255,0.02); border-radius:999px; overflow:hidden; margin-top:12px; border:1px solid rgba(255,255,255,0.02); }
+.progress-bar {
+  height:100%; width:0%; border-radius:999px;
+  background: linear-gradient(90deg, var(--accent-teal), var(--accent-blue));
+  transition: width 420ms cubic-bezier(.2,.9,.3,1);
+  box-shadow: 0 6px 18px rgba(12,85,112,0.18) inset;
+}
+
+/* OCR result */
+.kv { background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); color:var(--text); }
+.status-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px; }
+
+/* --------------------
+   Modal
+   -------------------- */
+.modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:1200; background: rgba(5,10,12,0.45); padding:18px; }
+.modal.hidden { display:none; }
+.modal-panel { max-width:560px; width:100%; border-radius:12px; padding:18px; }
+
+/* Session detail modal adjustments */
+#modal-session-detail .modal-panel {
+  max-height: 85vh;
+  overflow: auto;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+/* Slightly larger header */
+#modal-session-detail h4 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+/* Close button styling inside modal */
+#session-detail-close {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.04);
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#session-detail-close:hover { color: var(--text); border-color: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+/* Make action buttons laid out horizontally and stick to bottom if content short */
+#modal-session-detail .session-actions {
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+  justify-content:flex-start;
+}
+
+/* responsive tweaks */
+@media (max-width:760px) {
+  #modal-session-detail .modal-panel { padding:12px; max-width:96vw; }
+  #session-detail-close { top:10px; right:10px; }
+}
+
+/* Proper modal overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.55);  /* ← the tint you were missing */
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;   /* ensures it sits above admin list */
+}
+
+/* Hidden state */
+.modal.hidden {
+  display: none;
+}
+
+/* Modal panel */
+.modal .modal-panel {
+  background: #0d1a20;
+  border-radius: 14px;
+  padding: 18px 22px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  max-width: 900px;
+  width: 95%;
+  max-height: 85vh;
+  overflow-y: auto;
+  z-index: 6000;   /* panel stays above overlay */
+}
+
+/* Modal fade-in background */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Modal panel scale + slide */
+@keyframes modalPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Apply background animation */
+.modal {
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+/* Apply panel animation */
+.modal .modal-panel {
+  animation: modalPopIn 0.28s cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+
+
+/* --------------------
+   Admin layout
+   -------------------- */
+.admin-layout { display:grid; grid-template-columns: 260px 1fr; gap:16px; align-items:start; }
+.admin-filters { padding:14px; position:sticky; top:22px; height:max-content; }
+.admin-main { display:flex; flex-direction:column; gap:12px; }
+
+/* Table styles */
+.table-wrap { margin-top:12px; overflow:auto; border-radius:10px; border:1px solid rgba(255,255,255,0.03); }
+.table { width:100%; border-collapse:collapse; min-width:720px; }
+.table thead th { text-align:left; padding:12px; font-size:13px; color:var(--muted); border-bottom:1px solid rgba(255,255,255,0.02); background:transparent; position:sticky; top:0; z-index:2; }
+.table tbody td { padding:12px; border-bottom:1px solid rgba(255,255,255,0.02); color:var(--text); background:transparent; }
+.table tbody tr { cursor:pointer; transition: background var(--transition); }
+.table tbody tr:hover { background: rgba(255,255,255,0.01); }
+
+/* Session detail */
+.session-detail { padding:14px; margin-top:12px; }
+.session-detail h4 { margin:0 0 8px 0; }
+.session-actions { display:flex; gap:10px; margin-top:12px; }
+
+/* Empty results */
+.hidden { display:none; }
+#sessions-empty { padding:12px; }
+
+/* --------------------
+   Responsive
+   -------------------- */
+@media (max-width:980px){
+  .admin-layout { grid-template-columns: 1fr; }
+  .uploader-grid { grid-template-columns: 1fr; }
+  .status-grid { grid-template-columns:1fr; }
+  .brand-mark { width:44px; height:44px; font-size:16px; }
+  #root { padding:14px; }
+}
+
+/* --------------------
+   Tiny helpers & accessibility
+   -------------------- */
+.muted small, .muted.small { color:var(--muted); font-size:13px; }
+a { color:var(--accent-blue); text-decoration:none; }
+kbd { background: rgba(255,255,255,0.02); padding:4px 8px; border-radius:6px; font-weight:700; }
+
+/* subtle focus for keyboard users */
+:focus { outline: 3px solid var(--focus-ring); outline-offset:2px; border-radius:8px; }
+
+/* Force native select dropdown to use dark theme and proper one-option-per-line */
+select {
+  background-color: #0d1a26;       /* dark navy */
+  color: #ffffff;                  /* readable text */
+  border: 1px solid #2a3a4d;
+}
+
+/* Dropdown popup styling */
+select option {
+  background-color: #0d1a26 !important;
+  color: #ffffff !important;
+  padding: 8px 12px;
+  display: block;
+  line-height: 1.6;
+}
+
+/* Fix Chrome ignoring option width */
+select option {
+  white-space: nowrap;
+}
+
+/* Improve focus outline */
+select:focus {
+  outline: none;
+  border-color: var(--accent-teal);
+}
+
+/* Help & Tips */
+#help-tips h2,
+#faq h2 {
+  margin-bottom: 14px;
+}
+
+#help-tips h3 {
+  margin-top: 18px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.tips-list {
+  margin-left: 16px;
+  margin-bottom: 12px;
+}
+.tips-list li {
+  margin-bottom: 6px;
+  color: var(--muted);
+}
