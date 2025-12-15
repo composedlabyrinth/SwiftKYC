@@ -162,7 +162,7 @@ alembic upgrade head
 ### 6️⃣ Start the FastAPI server
 
 ```bash
-uvicorn uvicorn main:app --reload
+uvicorn main:app --reload
 ```
 
 ### 7️⃣ Access the Application
